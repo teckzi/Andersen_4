@@ -11,7 +11,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 
-class CustomClock @JvmOverloads constructor(context: Context, private val attrs:AttributeSet? = null, defStyle:Int = 0):
+class CustomClock @JvmOverloads constructor(context: Context,attrs:AttributeSet? = null, defStyle:Int = 0):
     View(context,attrs,defStyle) {
 
     private var clockPadding = 0
@@ -115,21 +115,28 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
             val angle = Math.PI / 6 * (i - 3)
             val x = (width / 2 + cos(angle) * clockRadius - rect.width() / 2).toInt()
             val y = (height / 2 + sin(angle) * clockRadius + rect.height() / 2).toInt()
-            canvas.drawText(number, x.toFloat(), y.toFloat(), paint)
+            canvas.drawText(number, x.toFloat()+12, y.toFloat(), paint)
         }
     }
 
-    private fun drawArrow(canvas: Canvas, loc: Double, isHour: Boolean = false,isMinute:Boolean = false) {
+    private fun drawArrow(canvas: Canvas, location: Float, isHour: Boolean = false, isMinute:Boolean = false) {
+        val arrowRadius:Int
         when {
-            isHour -> paint.color = hourArrowColor
-            isMinute -> paint.color = minuteArrowColor
-            else -> {paint.color = secondsArrowColor
-            paint.strokeWidth = 5f}
+            isHour -> {
+                paint.color = hourArrowColor
+                arrowRadius = clockRadius - clockArrowLength - clockHourArrowLength
+            }
+            isMinute -> {
+                paint.color = minuteArrowColor
+                arrowRadius = clockRadius - clockArrowLength
+            }
+            else -> {
+                paint.color = secondsArrowColor
+                paint.strokeWidth = 5f
+                arrowRadius = clockRadius - clockArrowLength
+            }
         }
-        val angle = Math.PI * loc / 30 - Math.PI / 2
-        val arrowRadius =
-            if (isHour) clockRadius - clockArrowLength - clockHourArrowLength
-            else clockRadius - clockArrowLength
+        val angle = Math.PI * location / 30 - Math.PI / 2
         canvas.drawLine(
             (width / 2).toFloat(), (height / 2).toFloat(),
             (width / 2 + cos(angle) * arrowRadius).toFloat(),
@@ -142,10 +149,12 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
         val calendar = Calendar.getInstance()
         var hour = calendar[Calendar.HOUR_OF_DAY].toFloat()
         hour = if (hour > 12) hour - 12 else hour
+        val minute = calendar.get(Calendar.MINUTE).toFloat()
+        val second = calendar.get(Calendar.SECOND).toFloat()
 
-        drawArrow(canvas, ((hour + calendar[Calendar.MINUTE] / 60) * 5f).toDouble(), true)
-        drawArrow(canvas, calendar[Calendar.MINUTE].toDouble(),isMinute = true)
-        drawArrow(canvas, calendar[Calendar.SECOND].toDouble())
+        drawArrow(canvas, ((hour + minute / 60) * 5f), true)
+        drawArrow(canvas, (minute + second / 60),isMinute = true)
+        drawArrow(canvas, second)
     }
 
     private fun drawDigitalClock(canvas: Canvas){

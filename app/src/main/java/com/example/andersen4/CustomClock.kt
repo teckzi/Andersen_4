@@ -3,14 +3,12 @@ package com.example.andersen4
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.properties.Delegates
 
 
 class CustomClock @JvmOverloads constructor(context: Context, private val attrs:AttributeSet? = null, defStyle:Int = 0):
@@ -27,23 +25,22 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
     private val typedArray = context.obtainStyledAttributes(attrs,R.styleable.CustomClock)
     private var defaultColor = context.resources.getColor(R.color.Coral,null)
 
-    private var rectBackground = typedArray.getColor(R.styleable.CustomClock_rectBackgroundColor,Color.WHITE)
-    //Цвет стрелок
+    /** Цвет стрелок */
     private var hourArrowColor = typedArray.getColor(R.styleable.CustomClock_hourArrowColor,defaultColor)
     private var minuteArrowColor = typedArray.getColor(R.styleable.CustomClock_minuteArrowColor,defaultColor)
     private var secondsArrowColor = typedArray.getColor(R.styleable.CustomClock_secondsArrowColor,defaultColor)
-    //Внутренний круг
+    /** Центральный круг */
     private var centerCircleColor = typedArray.getColor(R.styleable.CustomClock_centerColor,defaultColor)
-    //Цифры
+    /** Цифры */
     private var numbersColor = typedArray.getColor(R.styleable.CustomClock_numbersColor,defaultColor)
     private var numbersSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, typedArray.getDimension(R.styleable.CustomClock_fontSize,13f),
         resources.displayMetrics)
-    //Внешний круг
+    /** Рамка */
     private var circleColor = typedArray.getColor(R.styleable.CustomClock_clockColor,defaultColor)
     private var circleIsAntiAlias:Boolean? = true
     private var circleStrokeWidth:Float? = typedArray.getDimension(R.styleable.CustomClock_strokeWidth,10f)
     private var circleBackgroundColor = typedArray.getColor(R.styleable.CustomClock_clockBackgroundColor,Color.WHITE)
-    //Электронные часы
+    /** Электронные часы */
     private var showDigitalClock = typedArray.getBoolean(R.styleable.CustomClock_showDigitalClock,false)
     private var digitalClockColor = typedArray.getColor(R.styleable.CustomClock_digitalClockColor,defaultColor)
 

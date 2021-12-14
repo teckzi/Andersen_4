@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomClock">
+        <attr name="clockColor" format="color"/>
+        <attr name="rectBackgroundColor" format="color"/>
+        <attr name="centerColor" format="color"/>
+        <attr name="hourArrowColor" format="color"/>
+        <attr name="minuteArrowColor" format="color"/>
+        <attr name="secondsArrowColor" format="color"/>
+        <attr name="numbersColor" format="color"/>
+        <attr name="digitalClockColor" format="color"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="fontSize" format="dimension"/>
+        <attr name="showDigitalClock" format="boolean"/>
+    </declare-styleable>
+</resources>

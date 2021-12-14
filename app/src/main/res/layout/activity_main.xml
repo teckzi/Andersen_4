@@ -10,22 +10,26 @@
 
     <com.example.andersen4.CustomClock
         android:id="@+id/myClock"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:showDigitalClock="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:centerColor="@color/Black"
-        app:numbersColor="@color/Black"
         app:clockColor="@color/Black"
         app:digitalClockColor="@color/Black"
-        app:minuteArrowColor="@color/Black"
-        app:secondsArrowColor="@color/Red"
-        app:hourArrowColor="@color/Black"
-        app:rectBackgroundColor="@color/LightGrey"
         app:fontSize="5sp"
-        app:strokeWidth="4dp"
+        app:hourArrowColor="@color/Black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:clockBackgroundColor="@color/Magenta"
+        app:minuteArrowColor="@color/Black"
+        app:numbersColor="@color/Black"
+        app:secondsArrowColor="@color/Red"
+        app:showDigitalClock="true"
+        app:strokeWidth="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,46 +22,34 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
     private var clockHourArrowLength = 0
     private var clockRadius = 0
     private var clockAdded = false
-
     private val clockNumbers = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
     private val rect = Rect()
-    private var rectBackground by Delegates.notNull<Int>()
-    //Цвет стрелок
-    private var hourArrowColor by Delegates.notNull<Int>()
-    private var minuteArrowColor by Delegates.notNull<Int>()
-    private var secondsArrowColor by Delegates.notNull<Int>()
-    //Внутренний круг
-    private var centerCircleColor by Delegates.notNull<Int>()
-    //Цифры
-    private var numbersColor by Delegates.notNull<Int>()
-    private var numbersSize by Delegates.notNull<Float>()
-    //Внешний круг
-    private var circleColor by Delegates.notNull<Int>()
-    private var circleIsAntiAlias:Boolean? = true
-    private var circleStrokeWidth:Float? = 10f
-    //Электронные часы
-    private var showDigitalClock by Delegates.notNull<Boolean>()
-    private var digitalClockColor by Delegates.notNull<Int>()
-
+    private val typedArray = context.obtainStyledAttributes(attrs,R.styleable.CustomClock)
     private var defaultColor = context.resources.getColor(R.color.Coral,null)
+
+    private var rectBackground = typedArray.getColor(R.styleable.CustomClock_rectBackgroundColor,Color.WHITE)
+    //Цвет стрелок
+    private var hourArrowColor = typedArray.getColor(R.styleable.CustomClock_hourArrowColor,defaultColor)
+    private var minuteArrowColor = typedArray.getColor(R.styleable.CustomClock_minuteArrowColor,defaultColor)
+    private var secondsArrowColor = typedArray.getColor(R.styleable.CustomClock_secondsArrowColor,defaultColor)
+    //Внутренний круг
+    private var centerCircleColor = typedArray.getColor(R.styleable.CustomClock_centerColor,defaultColor)
+    //Цифры
+    private var numbersColor = typedArray.getColor(R.styleable.CustomClock_numbersColor,defaultColor)
+    private var numbersSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, typedArray.getDimension(R.styleable.CustomClock_fontSize,13f),
+        resources.displayMetrics)
+    //Внешний круг
+    private var circleColor = typedArray.getColor(R.styleable.CustomClock_clockColor,defaultColor)
+    private var circleIsAntiAlias:Boolean? = true
+    private var circleStrokeWidth:Float? = typedArray.getDimension(R.styleable.CustomClock_strokeWidth,10f)
+    private var circleBackgroundColor = typedArray.getColor(R.styleable.CustomClock_clockBackgroundColor,Color.WHITE)
+    //Электронные часы
+    private var showDigitalClock = typedArray.getBoolean(R.styleable.CustomClock_showDigitalClock,false)
+    private var digitalClockColor = typedArray.getColor(R.styleable.CustomClock_digitalClockColor,defaultColor)
+
     private val paint:Paint = Paint()
 
     init {
-        val typedArray = context.obtainStyledAttributes(attrs,R.styleable.CustomClock)
-        numbersSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, typedArray.getDimension(R.styleable.CustomClock_fontSize,13f),
-            resources.displayMetrics)
-        circleStrokeWidth = typedArray.getDimension(R.styleable.CustomClock_strokeWidth,10f)
-        showDigitalClock = typedArray.getBoolean(R.styleable.CustomClock_showDigitalClock,false)
-
-        circleColor = typedArray.getColor(R.styleable.CustomClock_clockColor,defaultColor)
-        rectBackground = typedArray.getColor(R.styleable.CustomClock_rectBackgroundColor,Color.WHITE)
-        numbersColor = typedArray.getColor(R.styleable.CustomClock_numbersColor,defaultColor)
-        hourArrowColor = typedArray.getColor(R.styleable.CustomClock_hourArrowColor,defaultColor)
-        minuteArrowColor = typedArray.getColor(R.styleable.CustomClock_minuteArrowColor,defaultColor)
-        secondsArrowColor = typedArray.getColor(R.styleable.CustomClock_secondsArrowColor,defaultColor)
-        centerCircleColor = typedArray.getColor(R.styleable.CustomClock_centerColor,defaultColor)
-        digitalClockColor = typedArray.getColor(R.styleable.CustomClock_digitalClockColor,defaultColor)
-
         typedArray.recycle()
     }
 
@@ -80,8 +68,8 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
         if (!clockAdded){
             addClock()
         }
-        canvas.drawColor(rectBackground)
         drawCircle(canvas)
+        drawCircleBound(canvas)
         drawCenterCircle(canvas)
         if (showDigitalClock) drawDigitalClock(canvas)
         drawNumeral(canvas)
@@ -94,6 +82,15 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
         paint.run {
             reset()
             isAntiAlias = circleIsAntiAlias!!
+            style = Paint.Style.FILL
+            color = circleBackgroundColor
+        }
+        canvas.drawCircle(
+            (width / 2).toFloat(), (height / 2).toFloat(), (clockRadius + clockPadding - 10).toFloat(),paint)
+    }
+
+    private fun drawCircleBound(canvas: Canvas){
+        paint.run {
             color = circleColor
             strokeWidth = circleStrokeWidth!!
             style = Paint.Style.STROKE
@@ -149,9 +146,6 @@ class CustomClock @JvmOverloads constructor(context: Context, private val attrs:
         var hour = calendar[Calendar.HOUR_OF_DAY].toFloat()
         hour = if (hour > 12) hour - 12 else hour
 
-        val minutePosition = (calendar[Calendar.SECOND])
-        val houuur = ((hour + calendar[Calendar.MINUTE] / 60) * 5f).toDouble()
-        Log.d("TAG", houuur.toString())
         drawArrow(canvas, ((hour + calendar[Calendar.MINUTE] / 60) * 5f).toDouble(), true)
         drawArrow(canvas, calendar[Calendar.MINUTE].toDouble(),isMinute = true)
         drawArrow(canvas, calendar[Calendar.SECOND].toDouble())

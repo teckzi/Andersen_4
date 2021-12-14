@@ -3,6 +3,7 @@
     <declare-styleable name="CustomClock">
         <attr name="clockColor" format="color"/>
         <attr name="rectBackgroundColor" format="color"/>
+        <attr name="clockBackgroundColor" format="color"/>
         <attr name="centerColor" format="color"/>
         <attr name="hourArrowColor" format="color"/>
         <attr name="minuteArrowColor" format="color"/>
